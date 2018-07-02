@@ -375,6 +375,9 @@
     <ClCompile Include="..\util\log.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="esys_free.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="esys_crypto.h">

@@ -91,6 +91,7 @@ EXPORTS
     Esys_FlushContext
     Esys_FlushContext_Async
     Esys_FlushContext_Finish
+    esys_free
     Esys_GetCapability
     Esys_GetCapability_Async
     Esys_GetCapability_Finish

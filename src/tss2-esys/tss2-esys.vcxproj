@@ -259,6 +259,7 @@
     <ClCompile Include="esys_mu.c" />
     <ClCompile Include="esys_tcti_default.c" />
     <ClCompile Include="esys_tr.c" />
+    <ClCompile Include="esys_free.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\util\log.h" />
