@@ -15,6 +15,7 @@
 #include "tss2_tcti.h"
 #include "tss2_tcti_device.h"
 #include "tss2_tcti_mssim.h"
+#include "tss2_tcti_tbs.h"
 
 #define LOGMODULE esys
 #include "util/log.h"
@@ -41,7 +42,10 @@ struct {
       .description = "Access to /dev/tpmrm0" },
     { .init = Tss2_Tcti_Device_Init, .conf = "/dev/tpm0",
       .description = "Access to /dev/tpm0" },
-#endif /* _WIN32 */
+#else /* _WIN32 */
+   { .init = Tss2_Tcti_Tbs_Init, .conf = "",
+      .description = "Access to TBS" },
+#endif /* else */
     { .init = Tss2_Tcti_Mssim_Init, .conf = "host=localhost,port=2321",
       .description = "Access to Mssim-simulator for tcp://localhost:2321" },
 };
