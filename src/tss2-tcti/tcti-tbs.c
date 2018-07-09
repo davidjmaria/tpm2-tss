@@ -17,6 +17,7 @@
 
 #include "tcti-common.h"
 #include "tcti-tbs.h"
+
 #define LOGMODULE tcti
 #include "util/log.h"
 
@@ -35,6 +36,7 @@ tcti_tbs_context_cast (TSS2_TCTI_CONTEXT *tcti_ctx)
     }
     return NULL;
 }
+
 /*
  * This function down-casts the TBS TCTI context to the common context
  * defined in the tcti-common module.
@@ -59,7 +61,7 @@ tcti_tbs_transmit (
     TSS2_RC rc = TSS2_RC_SUCCESS;
     TBS_RESULT tbs_rc;
     /* Reset resSize */
-    tcti_tbs->resSize = TBS_RESULT_MAX_BUFFER_SIZE;
+    tcti_tbs->resSize = sizeof (BYTE) * TBS_RESULT_MAX_BUFFER_SIZE;
 
     if (tcti_tbs == NULL) {
         return TSS2_TCTI_RC_BAD_CONTEXT;
@@ -119,7 +121,7 @@ tcti_tbs_receive (
     }
     if (*response_size < tcti_tbs->resSize) {
         LOG_WARNING ("Caller provided buffer that is not large enough to "
-                  "hold the response buffer.");
+                     "hold the response buffer.");
         rc = TSS2_TCTI_RC_BAD_VALUE;
         goto out;
     }
@@ -133,6 +135,7 @@ tcti_tbs_receive (
     if (rc != TSS2_RC_SUCCESS) {
         goto out;
     }
+
     /*
      * Executing code beyond this point transitions the state machine to
      * TRANSMIT. Another call to this function will not be possible until
@@ -221,9 +224,10 @@ Tss2_Tcti_Tbs_Init (
     TBS_CONTEXT_PARAMS2 params;
     TPM_DEVICE_INFO info;
 
-    if (tctiContext == NULL && size == NULL) {
-        return TSS2_TCTI_RC_BAD_VALUE;
-    } else if (tctiContext == NULL) {
+    if (tctiContext == NULL) {
+        if (size == NULL) {
+            return TSS2_TCTI_RC_BAD_VALUE;
+        }
         *size = sizeof (TSS2_TCTI_TBS_CONTEXT);
         return TSS2_RC_SUCCESS;
     }
@@ -241,6 +245,7 @@ Tss2_Tcti_Tbs_Init (
     tcti_tbs = tcti_tbs_context_cast (tctiContext);
     tcti_common = tcti_tbs_down_cast (tcti_tbs);
     tcti_common->state = TCTI_STATE_TRANSMIT;
+
     memset (&tcti_common->header, 0, sizeof (tcti_common->header));
     tcti_common->locality = 0;
 
